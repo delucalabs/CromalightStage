@@ -2,6 +2,7 @@
 #include <Wire.h>
 #include <esp_now.h>
 
+#include "BlueMatrixEffect.h"
 #include "LibGuitarMap.h"
 #include "PipesEffect.h"
 
@@ -16,6 +17,7 @@ packet packetData;
 LibGuitarMap guitarMap;
 
 PipesEffect pipesEffect(&guitarMap);
+BlueMatrixEffect blueMatrixEffect(&guitarMap);
 
 void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
     memcpy(&packetData, incomingData, sizeof(packetData));
@@ -40,7 +42,15 @@ void setup() {
 }
 
 void loop() {
-    if (packetData.effectNumber == 0) {
-        pipesEffect.draw();
+    switch (packetData.effectNumber) {
+        case 0:
+            pipesEffect.draw();
+            break;
+        case 1:
+            blueMatrixEffect.draw();
+            break;
+
+        default:
+            break;
     }
 }
