@@ -1,0 +1,46 @@
+#include <WiFi.h>
+#include <Wire.h>
+#include <esp_now.h>
+
+#include "LibGuitarMap.h"
+#include "PipesEffect.h"
+
+#define NUM_LEDS_B 489  // 22 Led in più di buffer
+#define NUM_LEDS_T 378  // 22 Led in più di buffer
+
+typedef struct packet {
+    uint8_t effectNumber;
+} packet;
+
+packet packetData;
+LibGuitarMap guitarMap;
+
+PipesEffect pipesEffect(&guitarMap);
+
+void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
+    memcpy(&packetData, incomingData, sizeof(packetData));
+
+    uint8_t effectNumber = packetData.effectNumber;
+
+    Serial.printf("Switching effect to: %d\n", effectNumber);
+}
+
+void setup() {
+    Serial.begin(115200);
+    guitarMap.init(2000);
+    WiFi.mode(WIFI_STA);
+
+    // Init ESP-NOW
+    if (esp_now_init() != 0) {
+        Serial.println("Error initializing ESP-NOW");
+        return;
+    }
+
+    esp_now_register_recv_cb(OnDataRecv);
+}
+
+void loop() {
+    if (packetData.effectNumber == 0) {
+        pipesEffect.draw();
+    }
+}
