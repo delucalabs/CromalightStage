@@ -25,6 +25,8 @@ void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
     uint8_t effectNumber = packetData.effectNumber;
 
     Serial.printf("Switching effect to: %d\n", effectNumber);
+    guitarMap.setRGBColor(0, 0, 0);
+    guitarMap.fill(true);
 }
 
 void setup() {
