@@ -30,3 +30,6 @@ void WaveEffect::draw() {
     delay(50);
     guitarMap->update();
 }
+
+WaveEffect::~WaveEffect() {
+}
