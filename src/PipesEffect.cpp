@@ -2,8 +2,6 @@
 
 #include <vector>
 
-#include "LibGuitarMap.h"
-
 PipesEffect::PipesEffect(LibGuitarMap* guitarMap) {
     this->guitarMap = guitarMap;
 }

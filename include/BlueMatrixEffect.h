@@ -1,4 +1,3 @@
-
 #include "LibGuitarMap.h"
 
 class BlueMatrixEffect {
