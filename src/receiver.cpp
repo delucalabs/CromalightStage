@@ -5,6 +5,7 @@
 #include "BlueMatrixEffect.h"
 #include "LibGuitarMap.h"
 #include "PipesEffect.h"
+#include "WaveEffect.h"
 
 #define NUM_LEDS_B 489  // 22 Led in più di buffer
 #define NUM_LEDS_T 378  // 22 Led in più di buffer
@@ -18,6 +19,7 @@ LibGuitarMap guitarMap;
 
 PipesEffect pipesEffect(&guitarMap);
 BlueMatrixEffect blueMatrixEffect(&guitarMap);
+WaveEffect waveEffect(&guitarMap);
 
 void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
     memcpy(&packetData, incomingData, sizeof(packetData));
@@ -50,6 +52,9 @@ void loop() {
             break;
         case 1:
             blueMatrixEffect.draw();
+            break;
+        case 2:
+            waveEffect.draw();
             break;
 
         default:
