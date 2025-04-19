@@ -4,6 +4,7 @@
 #include <esp_wifi.h>
 
 #include "BlueMatrixEffect.h"
+#include "LaserEffect.h"
 #include "LibGuitarMap.h"
 #include "PipesEffect.h"
 #include "WaveEffect.h"
@@ -19,16 +20,30 @@ packet packetData;
 
 LibGuitarMap guitarMap;
 
+LaserEffect laserEffect(guitarMap);
 PipesEffect pipesEffect(guitarMap);
 BlueMatrixEffect blueMatrixEffect(guitarMap);
 WaveEffect waveEffect(guitarMap);
 
+uint8_t effectNumber = 0;
+
 void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
     memcpy(&packetData, incomingData, sizeof(packetData));
 
-    uint8_t effectNumber = packetData.effectNumber;
+    if (packetData.effectNumber == 4) {
+        guitarMap.setRGBColor(255, 255, 255);
+        guitarMap.fill(true);
+        delay(100);
+        guitarMap.setRGBColor(0, 0, 0);
+        guitarMap.fill(true);
+    } else {
+        effectNumber = packetData.effectNumber;
 
-    Serial.printf("Switching effect to: %d\n", effectNumber);
+        Serial.printf("Switching effect to: %d\n", effectNumber);
+
+        guitarMap.setRGBColor(0, 0, 0);
+        guitarMap.fill(true);
+    }
 }
 
 void setup() {
@@ -56,9 +71,9 @@ void setup() {
 }
 
 void loop() {
-    switch (packetData.effectNumber) {
+    switch (effectNumber) {
         case 0:
-            pipesEffect.draw();
+            laserEffect.draw();
             break;
         case 1:
             pipesEffect.draw();
