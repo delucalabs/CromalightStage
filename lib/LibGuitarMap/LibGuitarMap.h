@@ -42,7 +42,7 @@ class LibGuitarMap {
     int ledBufferB = 1;
     int ledBufferT = 1;
 
-      public:
+   public:
     LibGuitarMap();
 
     // ~LibGuitarMap();
@@ -54,6 +54,6 @@ class LibGuitarMap {
     void setRGBColor(int r_new, int g_new, int b_new);
     void setHSVColor(int h_new, int s_new, int v_new);
 
-    void drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1);
+    void drawLine(int x0, int y0, int x1, int y1, bool update);
 };
 #endif

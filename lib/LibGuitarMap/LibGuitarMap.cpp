@@ -185,8 +185,8 @@ void LibGuitarMap::update() {
     FastLED.show();
 }
 
-void LibGuitarMap::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1) {
-    int16_t steep = abs(y1 - y0) > abs(x1 - x0);
+void LibGuitarMap::drawLine(int x0, int y0, int x1, int y1, bool update) {
+    int steep = abs(y1 - y0) > abs(x1 - x0);
     if (steep) {
         adagfxswap(x0, y0);
         adagfxswap(x1, y1);
@@ -197,12 +197,12 @@ void LibGuitarMap::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1) {
         adagfxswap(y0, y1);
     }
 
-    int16_t dx, dy;
+    int dx, dy;
     dx = x1 - x0;
     dy = abs(y1 - y0);
 
-    int16_t err = dx / 2;
-    int16_t ystep;
+    int err = dx / 2;
+    int ystep;
 
     if (y0 < y1) {
         ystep = 1;
@@ -212,14 +212,18 @@ void LibGuitarMap::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1) {
 
     for (; x0 <= x1; x0++) {
         if (steep) {
-            point(y0, x0, true);
+            point(y0, x0, false);
         } else {
-            point(x0, y0, true);
+            point(x0, y0, false);
         }
         err -= dy;
         if (err < 0) {
             y0 += ystep;
             err += dx;
         }
+    }
+
+    if (update) {
+        LibGuitarMap::update();
     }
 }
