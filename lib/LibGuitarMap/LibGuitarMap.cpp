@@ -6,9 +6,6 @@
         a = a ^ b;       \
     }
 
-int ledBufferB = 1;
-int ledBufferT = 1;
-
 // 0 -> RGB
 // 1 -> HSV
 int colorType = 0;
@@ -90,25 +87,29 @@ int matrixT[34][20] = {
 int fadeAmount = 5;
 int brightness = 255;
 
-CRGB leds_t[NUM_LEDS_T];
-CRGB leds_b[NUM_LEDS_B];
+CRGB ledsT[NUM_LEDS_T];
+CRGB ledsB[NUM_LEDS_B];
 
 LibGuitarMap::LibGuitarMap() {};
 
 void LibGuitarMap::init(int power = 500) {
-    FastLED.addLeds<NEOPIXEL, 38>(leds_b, NUM_LEDS_B);
-    FastLED.addLeds<NEOPIXEL, 40>(leds_t, NUM_LEDS_T);
+    FastLED.addLeds<NEOPIXEL, 18>(ledsB, NUM_LEDS_B);
+    FastLED.addLeds<NEOPIXEL, 19>(ledsT, NUM_LEDS_T);
     FastLED.setMaxPowerInVoltsAndMilliamps(5, power);
 }
 
-// DRAWING
-
-void LibGuitarMap::point(int x, int y, bool update) {
+/**
+ * @brief Draw a point on the guitar.
+ *
+ * @param x X Coordinate of the point
+ * @param y Y Coordinate of the point
+ * @param update If true, the point will be immediatly displayed.
+ * If false you will need to call `update()`
+ *
+ * @return void
+ */
+void LibGuitarMap::point(int x, int y, bool update = true) {
     int ledN = 0;
-
-    if (x == 6 && y == 8) {
-        return;
-    }
 
     if ((x < 0 || x >= 43) || (y < 0 || y > 34)) {
     } else if (x < 23) {
@@ -117,9 +118,9 @@ void LibGuitarMap::point(int x, int y, bool update) {
 
         if (ledN < NUM_LEDS_B) {
             if (colorType == 0) {
-                leds_b[ledN + ledBufferB] = CRGB(r, g, b);
+                ledsB[ledN + ledBufferB] = CRGB(r, g, b);
             } else {
-                leds_b[ledN + ledBufferB] = CHSV(h, s, v);
+                ledsB[ledN + ledBufferB] = CHSV(h, s, v);
             }
         }
     } else {
@@ -128,9 +129,9 @@ void LibGuitarMap::point(int x, int y, bool update) {
 
         if (ledN < NUM_LEDS_T) {
             if (colorType == 0) {
-                leds_t[ledN + ledBufferT] = CRGB(r, g, b);
+                ledsT[ledN + ledBufferT] = CRGB(r, g, b);
             } else {
-                leds_t[ledN + ledBufferT] = CHSV(h, s, v);
+                ledsT[ledN + ledBufferT] = CHSV(h, s, v);
             }
         }
     }
@@ -140,23 +141,22 @@ void LibGuitarMap::point(int x, int y, bool update) {
     }
 }
 
-void LibGuitarMap::fill(bool update = false) {
+void LibGuitarMap::fill(bool update = true) {
     if (colorType == 0) {
         for (int i = 0; i < NUM_LEDS_B + ledBufferB; i++) {
-            leds_b[i] = CRGB(r, g, b);
-            Serial.println(r);
+            ledsB[i] = CRGB(r, g, b);
         }
 
         for (int i = 0; i < NUM_LEDS_T + ledBufferT; i++) {
-            leds_t[i] = CRGB(r, g, b);
+            ledsT[i] = CRGB(r, g, b);
         }
     } else if (colorType == 1) {
         for (int i = 0; i < NUM_LEDS_B + ledBufferB; i++) {
-            leds_b[i] = CHSV(h, s, v);
+            ledsB[i] = CHSV(h, s, v);
         }
 
         for (int i = 0; i < NUM_LEDS_T + ledBufferT; i++) {
-            leds_t[i] = CHSV(h, s, v);
+            ledsT[i] = CHSV(h, s, v);
         }
     }
 
@@ -166,34 +166,18 @@ void LibGuitarMap::fill(bool update = false) {
 }
 
 void LibGuitarMap::setRGBColor(int r_new, int g_new, int b_new) {
-    if (r > 255)
-        r = 0;
-
-    if (g > 255)
-        g = 0;
-
-    if (b > 255)
-        b = 0;
-
     r = r_new;
     g = g_new;
     b = b_new;
+
     colorType = 0;
 }
 
 void LibGuitarMap::setHSVColor(int h_new, int s_new, int v_new) {
-    if (h > 255)
-        h = 0;
-
-    if (s > 255)
-        s = 0;
-
-    if (v > 255)
-        v = 0;
-
     h = h_new;
     s = s_new;
     v = v_new;
+
     colorType = 1;
 }
 

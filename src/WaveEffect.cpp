@@ -1,11 +1,12 @@
 #include "WaveEffect.h"
 
-WaveEffect::WaveEffect(LibGuitarMap* guitarMap) {
+WaveEffect::WaveEffect(const LibGuitarMap& guitarMap) {
     this->guitarMap = guitarMap;
-    int h = 240;
+
+    int h = WAVE_MIN_HUE;
 
     for (int y = 0; y < HEIGHT; y++) {
-        h = random(240, 270);
+        h = random(WAVE_MIN_HUE, WAVE_MAX_HUE);
 
         for (int x = 0; x < WIDTH; x++) {
             points[y][x] = h + random(-2, 2);
@@ -18,17 +19,17 @@ void WaveEffect::draw() {
         for (int x = 0; x < WIDTH; x++) {
             points[y][x]++;
 
-            if (points[y][x] > 270) {
-                points[y][x] = 240;
+            if (points[y][x] > WAVE_MAX_HUE) {
+                points[y][x] = WAVE_MIN_HUE;
             }
 
-            guitarMap->setHSVColor(points[y][x], 255, 255);
-            guitarMap->point(x, y, false);
+            guitarMap.setHSVColor(points[y][x], 255, 255);
+            guitarMap.point(x, y, false);
         }
     }
 
     delay(50);
-    guitarMap->update();
+    guitarMap.update();
 }
 
 WaveEffect::~WaveEffect() {

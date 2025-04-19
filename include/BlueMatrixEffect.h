@@ -2,13 +2,12 @@
 
 class BlueMatrixEffect {
    private:
-    /* data */
-    LibGuitarMap* guitarMap;
     int points[HEIGHT];
     int points_black[HEIGHT];
+    LibGuitarMap guitarMap;
 
    public:
-    BlueMatrixEffect(LibGuitarMap* guitarMap);
+    BlueMatrixEffect(const LibGuitarMap& guitarMap);
     void draw();
     ~BlueMatrixEffect();
 };
