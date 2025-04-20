@@ -46,18 +46,18 @@ void setup() {
 }
 
 void loop() {
-    switch (packetData.effectNumber) {
-        case 0:
-            pipesEffect.draw();
-            break;
-        case 1:
-            blueMatrixEffect.draw();
-            break;
-        case 2:
+ //   switch (packetData.effectNumber) {
+ //       case 0:
+ //           pipesEffect.draw();
+ //           break;
+ //       case 1:
+ //           blueMatrixEffect.draw();
+ //           break;
+ //       case 2:
             waveEffect.draw();
-            break;
+//         break;
 
-        default:
-            break;
-    }
+//        default:
+//            break;
+//    }
 }

@@ -98,8 +98,8 @@ LibGuitarMap::LibGuitarMap() {};
 void LibGuitarMap::init(int power = 500) {
    
     #ifdef ESP32
-    FastLED.addLeds<NEOPIXEL,32>(leds_b, NUM_LEDS_B);
-    FastLED.addLeds<NEOPIXEL, 33>(leds_t, NUM_LEDS_T);
+    FastLED.addLeds<NEOPIXEL,18>(leds_b, NUM_LEDS_B);
+    FastLED.addLeds<NEOPIXEL, 19>(leds_t, NUM_LEDS_T);
     #elif
     FastLED.addLeds<NEOPIXEL,38>(leds_b, NUM_LEDS_B);
     FastLED.addLeds<NEOPIXEL, 40>(leds_t, NUM_LEDS_T);
