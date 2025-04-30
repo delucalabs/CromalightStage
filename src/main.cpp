@@ -6,17 +6,19 @@
 #include "BlueMatrixEffect.h"
 #include "LaserEffect.h"
 #include "LibGuitarMap.h"
+#include "LineEffect.h"
 #include "PipesEffect.h"
 #include "WaveEffect.h"
 
-#define NUM_LEDS_B 489  // 22 Led in più di buffer
-#define NUM_LEDS_T 378  // 22 Led in più di buffer
+// Loop degli effetti ogni 20 secondi
+#define DEMO_LOOP_MODE
+// Abilita il comando remoto con ESP-NOW
+#define CROMALIGHT_COMMANDER_ENABLED
 
-typedef struct packet {
-    uint8_t effectNumber;
-} packet;
-
-packet packetData;
+// 22 Led in più di buffer
+#define NUM_LEDS_B 489  
+// 22 Led in più di buffer
+#define NUM_LEDS_T 378 
 
 LibGuitarMap guitarMap;
 
@@ -24,8 +26,18 @@ LaserEffect laserEffect(guitarMap);
 PipesEffect pipesEffect(guitarMap);
 BlueMatrixEffect blueMatrixEffect(guitarMap);
 WaveEffect waveEffect(guitarMap);
+LineEffect lineEffect(guitarMap);
 
+uint64_t lastDemoMillis = 0;
 uint8_t effectNumber = 0;
+
+#ifdef CROMALIGHT_COMMANDER_ENABLED
+
+typedef struct packet {
+    uint8_t effectNumber;
+} packet;
+
+packet packetData;
 
 void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
     memcpy(&packetData, incomingData, sizeof(packetData));
@@ -45,13 +57,15 @@ void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
         guitarMap.fill(true);
     }
 }
+#endif
 
 void setup() {
     Serial.begin(115200);
     guitarMap.init(500);
+
+#ifdef CROMALIGHT_COMMANDER_ENABLED
     WiFi.mode(WIFI_STA);
 
-    // Init ESP-NOW
     if (esp_now_init() != 0) {
         Serial.println("Error initializing ESP-NOW");
         return;
@@ -64,16 +78,27 @@ void setup() {
                       baseMac[3], baseMac[4], baseMac[5]);
     }
 
-    randomSeed(esp_random());
-
     esp_now_register_recv_cb(OnDataRecv);
+#endif
+
+    randomSeed(esp_random());
     guitarMap.setRGBColor(255, 0, 0);
 }
 
 void loop() {
+#ifdef DEMO_LOOP_MODE
+    if (millis() - lastDemoMillis > 20000) {
+        lastDemoMillis = millis();
+        effectNumber++;
+        effectNumber = effectNumber % 5;
+        guitarMap.setRGBColor(0, 0, 0);
+        guitarMap.fill(true);
+    }
+#endif
+
     switch (effectNumber) {
         case 0:
-            laserEffect.draw();
+            lineEffect.draw();
             break;
         case 1:
             pipesEffect.draw();
@@ -83,6 +108,9 @@ void loop() {
             break;
         case 3:
             waveEffect.draw();
+            break;
+        case 5:
+            laserEffect.draw();
             break;
 
         default:
