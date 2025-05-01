@@ -10,7 +10,7 @@ HorizontalMatrixEffect::HorizontalMatrixEffect(const LibGuitarMap& guitarMap) {
 }
 
 void HorizontalMatrixEffect::draw() {
-    for (int i = 0; i < WIDTH; i++) {
+    for (int i = WIDTH-1; i >= 0; i--) {
         int blue = random(50, 255);
 
         guitarMap.setRGBColor(0, 0, blue);
