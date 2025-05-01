@@ -4,6 +4,7 @@
 #include <esp_wifi.h>
 
 #include "BlueMatrixEffect.h"
+#include "HorizontalMatrixEffect.h"
 #include "LaserEffect.h"
 #include "LibGuitarMap.h"
 #include "LineEffect.h"
@@ -27,6 +28,7 @@ PipesEffect pipesEffect(guitarMap);
 BlueMatrixEffect blueMatrixEffect(guitarMap);
 WaveEffect waveEffect(guitarMap);
 LineEffect lineEffect(guitarMap);
+HorizontalMatrixEffect horizontalMatrix(guitarMap);
 
 uint64_t lastDemoMillis = 0;
 uint8_t effectNumber = 0;
@@ -126,6 +128,14 @@ void loop() {
             laserEffect.draw();
             break;
         case 9:
+            // Black
+            guitarMap.setRGBColor(0, 0, 0);
+            guitarMap.fill(true);
+            break;
+        case 10:
+            horizontalMatrix.draw();
+            break;
+        case 11:
             // Black
             guitarMap.setRGBColor(0, 0, 0);
             guitarMap.fill(true);
