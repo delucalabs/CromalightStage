@@ -111,7 +111,7 @@ void LibGuitarMap::init(int power = 500) {
 void LibGuitarMap::point(int x, int y, bool update = true) {
     int ledN = 0;
 
-    if ((x < 0 || x >= 43) || (y < 0 || y > 34)) {
+    if ((x < 0 || x >= 43) || (y < 0 || y >= 34)) {
     } else if (x < 23) {
         // Bottom matrix
         ledN = matrixB[y][x];
