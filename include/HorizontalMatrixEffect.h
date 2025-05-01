@@ -2,8 +2,8 @@
 
 class HorizontalMatrixEffect {
    private:
-    int points[HEIGHT];
-    int points_black[HEIGHT];
+    int points[WIDTH];
+    int points_black[WIDTH];
     LibGuitarMap guitarMap;
 
    public:
