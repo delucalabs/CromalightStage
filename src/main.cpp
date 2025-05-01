@@ -11,14 +11,14 @@
 #include "WaveEffect.h"
 
 // Loop degli effetti ogni 20 secondi
-#define DEMO_LOOP_MODE
+// #define DEMO_LOOP_MODE
 // Abilita il comando remoto con ESP-NOW
 #define CROMALIGHT_COMMANDER_ENABLED
 
 // 22 Led in più di buffer
-#define NUM_LEDS_B 489  
+#define NUM_LEDS_B 489
 // 22 Led in più di buffer
-#define NUM_LEDS_T 378 
+#define NUM_LEDS_T 378
 
 LibGuitarMap guitarMap;
 
@@ -42,21 +42,14 @@ packet packetData;
 void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
     memcpy(&packetData, incomingData, sizeof(packetData));
 
-    if (packetData.effectNumber == 4) {
-        guitarMap.setRGBColor(255, 255, 255);
-        guitarMap.fill(true);
-        delay(100);
-        guitarMap.setRGBColor(0, 0, 0);
-        guitarMap.fill(true);
-    } else {
-        effectNumber = packetData.effectNumber;
+    effectNumber = packetData.effectNumber;
 
-        Serial.printf("Switching effect to: %d\n", effectNumber);
+    Serial.printf("Switching effect to: %d\n", effectNumber);
 
-        guitarMap.setRGBColor(0, 0, 0);
-        guitarMap.fill(true);
-    }
+    guitarMap.setRGBColor(0, 0, 0);
+    guitarMap.fill(true);
 }
+
 #endif
 
 void setup() {
@@ -101,16 +94,41 @@ void loop() {
             lineEffect.draw();
             break;
         case 1:
-            pipesEffect.draw();
+            // Black
+            guitarMap.setRGBColor(0, 0, 0);
+            guitarMap.fill(true);
             break;
         case 2:
-            blueMatrixEffect.draw();
+            pipesEffect.draw();
             break;
         case 3:
-            waveEffect.draw();
+            // Black
+            guitarMap.setRGBColor(0, 0, 0);
+            guitarMap.fill(true);
+            break;
+        case 4:
+            blueMatrixEffect.draw();
             break;
         case 5:
+            // Black
+            guitarMap.setRGBColor(0, 0, 0);
+            guitarMap.fill(true);
+            break;
+        case 6:
+            waveEffect.draw();
+            break;
+        case 7:
+            // Black
+            guitarMap.setRGBColor(0, 0, 0);
+            guitarMap.fill(true);
+            break;
+        case 8:
             laserEffect.draw();
+            break;
+        case 9:
+            // Black
+            guitarMap.setRGBColor(0, 0, 0);
+            guitarMap.fill(true);
             break;
 
         default:
